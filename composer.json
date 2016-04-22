@@ -1,20 +1,25 @@
 {
-    "name": "tuupola/slim-image-resize",
+    "name": "hd-cms/slim-image-resize",
     "type": "library",
     "description": "Image Resize Middleware for Slim Framework",
     "keywords": ["slim", "middleware", "image"],
-    "homepage": "https://github.com/tuupola/slim-image-resize",
+    "homepage": "https://github.com/HD-CMS/slim3-image-resize",
     "license": "MIT",
     "authors": [
         {
             "name": "Mika Tuupola",
             "email": "tuupola@appelsiini.net",
             "homepage": "http://www.appelsiini.net/"
+        },
+        {
+            "name": "Dennis Hemeier",
+            "email": "d.hemeier@hd-cms.de",
+            "homepage": "https://hd-cms.de/"
         }
     ],
     "require": {
-        "slim/slim": "~2.3",
-        "intervention/image": "~2.0"
+        "slim/slim": "~3.0",
+        "intervention/image": "~2.2"
     },
     "autoload": {
         "psr-0": { "Slim\\Middleware\\": "src/" }

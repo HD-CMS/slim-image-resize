@@ -17,8 +17,10 @@ namespace Slim\Middleware;
 
 use Intervention\Image\Image;
 use Slim\Middleware\ImageResize\DefaultMutator;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-class ImageResize extends \Slim\Middleware
+class ImageResize
 {
 
     protected $options;
@@ -45,15 +47,15 @@ class ImageResize extends \Slim\Middleware
         unset($this->options["mutator"]);
     }
 
-    public function call()
+    /**
+     * Call the middleware
+     */
+    public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next)
     {
-        $request  = $this->app->request;
-        $response = $this->app->response;
+        $folder   = $request->getUri()->getBasePath();
+        $resource = $request->getUri()->getPath();
 
-        $folder   = $request->getRootUri();
-        $resource = $request->getResourceUri();
-
-        $target   = $folder . $resource;
+        $target   = $folder . '/' . $resource;
         if ($matched = $this->mutator->parse($target)) {
             /* Extract array variables to current symbol table */
             extract($matched);
@@ -67,7 +69,7 @@ class ImageResize extends \Slim\Middleware
             if ($this->options["cache"]) {
                 /* TODO: Make this pretty. */
                 $cache = $_SERVER["DOCUMENT_ROOT"] . $folder . "/" .
-                         $this->options["cache"] . $target;
+                    $this->options["cache"] . $target;
 
                 $dir = pathinfo($cache, PATHINFO_DIRNAME);
                 if (false === is_dir($dir)) {
@@ -76,10 +78,12 @@ class ImageResize extends \Slim\Middleware
                 $this->mutator->save($cache);
             }
 
-            $response->header("Content-type", $this->mutator->mime());
-            $response->body($this->mutator->encode());
+            $newResponse = $response->withHeader('Content-type', $this->mutator->mime());
+            $body = $newResponse->getBody();
+            $body->write($this->mutator->encode());
+            return $newResponse;
         } else {
-            $this->next->call();
+            return $next($request, $response);
         }
     }
 

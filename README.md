@@ -1,4 +1,4 @@
-# Image Resize Middleware for Slim
+# Image Resize Middleware for Slim 3
 
 This middleware implements automatic image resizing based on image filename.
 
@@ -13,7 +13,7 @@ This middleware implements automatic image resizing based on image filename.
 You can install latest version using [composer](https://getcomposer.org/).
 
 ```
-$ composer require tuupola/slim-image-resize
+$ composer require hd-cms/slim-image-resize
 ```
 
 ## Configuration
@@ -21,7 +21,7 @@ $ composer require tuupola/slim-image-resize
 Configuration options are passed as an array. There are no mandatory parameters.
 
 ```php
-$app = new \Slim\Slim();
+$app = new \Slim\App();
 $app->add(new Slim\Middleware\ImageResize());
 ```
 
